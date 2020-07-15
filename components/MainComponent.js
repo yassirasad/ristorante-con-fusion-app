@@ -11,6 +11,7 @@ import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
+import Reservation from './ReservationComponent';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
@@ -91,6 +92,22 @@ function MenuNavigatorScreen() {
 }
 
 
+const ReservationNavigator = createStackNavigator();
+
+function ReservationNavigatorScreen() {
+    return (
+        <ReservationNavigator.Navigator screenOptions={HeaderOptions}>
+            <ReservationNavigator.Screen name="Reservation" component={Reservation}
+                options={({ navigation }) => ({
+                    headerLeft: () => <Icon name="menu" size={26} color='white'
+                        onPress={() => navigation.toggleDrawer()} />
+                })}
+            />
+        </ReservationNavigator.Navigator>
+    );
+}
+
+
 const ContactNavigator = createStackNavigator();
 
 function ContactNavigatorScreen() {
@@ -137,6 +154,14 @@ function MainNavigatorDrawer() {
                     drawerIcon: ({ focused, color, size }) => (
                         <Icon name='list' type='font-awesome' size={24} color={color} />
                     )
+                }}
+            />
+            <MainNavigator.Screen name="Reservation" component={ReservationNavigatorScreen}
+                options={{
+                    drawerIcon: ({ focused, color, size }) => (
+                        <Icon name='cutlery' type='font-awesome' size={24} color={color} />
+                    ),
+                    title: "Reserve Table"
                 }}
             />
             <MainNavigator.Screen name="Contact Us" component={ContactNavigatorScreen}
