@@ -41,6 +41,11 @@ const HeaderOptions = {
     }
 };
 
+const MenuIcon = ({ navigation }) => (
+    <Icon iconStyle={{ marginLeft: 10 }} name="menu" size={26} color='white'
+        onPress={() => navigation.toggleDrawer()} />
+);
+
 
 const HomeNavigator = createStackNavigator();
 
@@ -49,8 +54,7 @@ function HomeNavigatorScreen() {
         <HomeNavigator.Navigator screenOptions={HeaderOptions}>
             <HomeNavigator.Screen name="Home" component={Home}
                 options={({ navigation, route }) => ({
-                    headerLeft: () => <Icon name="menu" size={26} color='white'
-                        onPress={() => navigation.toggleDrawer()} />
+                    headerLeft: () => <MenuIcon navigation={navigation} />
                 })}
             />
         </HomeNavigator.Navigator>
@@ -65,8 +69,7 @@ function AboutNavigatorScreen() {
         <AboutNavigator.Navigator screenOptions={HeaderOptions}>
             <AboutNavigator.Screen name="About Us" component={About}
                 options={({ navigation }) => ({
-                    headerLeft: () => <Icon name="menu" size={26} color='white'
-                        onPress={() => navigation.toggleDrawer()} />
+                    headerLeft: () => <MenuIcon navigation={navigation} />
                 })}
             />
         </AboutNavigator.Navigator>
@@ -81,8 +84,7 @@ function MenuNavigatorScreen() {
         <MenuNavigator.Navigator initialRouteName='Menu' screenOptions={HeaderOptions}>
             <MenuNavigator.Screen name="Menu" component={Menu}
                 options={({ navigation }) => ({
-                    headerLeft: () => <Icon name="menu" size={26} color='white'
-                        onPress={() => navigation.toggleDrawer()} />
+                    headerLeft: () => <MenuIcon navigation={navigation} />
                 })}
             />
             <MenuNavigator.Screen name="Dishdetail" component={Dishdetail}
@@ -99,8 +101,7 @@ function ReservationNavigatorScreen() {
         <ReservationNavigator.Navigator screenOptions={HeaderOptions}>
             <ReservationNavigator.Screen name="Reservation" component={Reservation}
                 options={({ navigation }) => ({
-                    headerLeft: () => <Icon name="menu" size={26} color='white'
-                        onPress={() => navigation.toggleDrawer()} />
+                    headerLeft: () => <MenuIcon navigation={navigation} />
                 })}
             />
         </ReservationNavigator.Navigator>
@@ -115,8 +116,7 @@ function ContactNavigatorScreen() {
         <ContactNavigator.Navigator screenOptions={HeaderOptions}>
             <ContactNavigator.Screen name="Contact Us" component={Contact}
                 options={({ navigation }) => ({
-                    headerLeft: () => <Icon name="menu" size={26} color='white'
-                        onPress={() => navigation.toggleDrawer()} />
+                    headerLeft: () => <MenuIcon navigation={navigation} />
                 })}
             />
         </ContactNavigator.Navigator>
