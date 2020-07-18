@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
+import Favorites from './FavoriteComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Reservation from './ReservationComponent';
@@ -94,6 +95,21 @@ function MenuNavigatorScreen() {
 }
 
 
+const FavoritesNavigator = createStackNavigator();
+
+function FavoritesNavigatorScreen() {
+    return (
+        <FavoritesNavigator.Navigator screenOptions={HeaderOptions}>
+            <FavoritesNavigator.Screen name="Favorites" component={Favorites}
+                options={({ navigation }) => ({
+                    headerLeft: () => <MenuIcon navigation={navigation} />
+                })}
+            />
+        </FavoritesNavigator.Navigator>
+    );
+}
+
+
 const ReservationNavigator = createStackNavigator();
 
 function ReservationNavigatorScreen() {
@@ -154,6 +170,14 @@ function MainNavigatorDrawer() {
                     drawerIcon: ({ focused, color, size }) => (
                         <Icon name='list' type='font-awesome' size={24} color={color} />
                     )
+                }}
+            />
+            <MainNavigator.Screen name="Favorites" component={FavoritesNavigatorScreen}
+                options={{
+                    drawerLabel: 'My Favorites',
+                    drawerIcon: ({ focused, color, size }) => (
+                        <Icon name='heart' type='font-awesome' size={24} color={color} />
+                    ),
                 }}
             />
             <MainNavigator.Screen name="Reservation" component={ReservationNavigatorScreen}
