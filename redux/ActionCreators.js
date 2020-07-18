@@ -40,7 +40,7 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
 
 export const addComment = (dishId, rating, author, comment) => ({
     type: ActionTypes.ADD_COMMENT,
-    payload: {dishId, rating, author, comment, date: new Date().toISOString()}
+    payload: { dishId, rating, author, comment, date: new Date().toISOString() }
 });
 
 
@@ -169,3 +169,9 @@ export const addFavorite = (dishId) => ({
     type: ActionTypes.ADD_FAVORITE,
     payload: dishId
 });
+
+export const deleteFavorite = (dishId) => ({
+    type: ActionTypes.DELETE_FAVORITE,
+    payload: dishId
+});
+
