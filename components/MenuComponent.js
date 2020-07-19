@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { Tile } from 'react-native-elements';
 import { connect } from 'react-redux';
+import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
 
@@ -19,14 +20,16 @@ class Menu extends Component {
 
         const renderMenuItem = ({ item, index }) => {
             return (
-                <Tile
-                    key={index}
-                    title={item.name}
-                    caption={item.description}
-                    featured
-                    imageSrc={{ uri: baseUrl + item.image }}
-                    onPress={() => navigate('Dishdetail', { dishId: item.id })}
-                />
+                <Animatable.View animation="pulse" duration={2000} >
+                    <Tile
+                        key={index}
+                        title={item.name}
+                        caption={item.description}
+                        featured
+                        imageSrc={{ uri: baseUrl + item.image }}
+                        onPress={() => navigate('Dishdetail', { dishId: item.id })}
+                    />
+                </Animatable.View>
             );
         }
 
