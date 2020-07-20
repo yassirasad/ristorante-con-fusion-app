@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Text, View, FlatList, ScrollView, Modal, Button } from 'react-native';
+import React, { Component, useRef } from 'react';
+import { Text, View, FlatList, ScrollView, Modal, Button, Alert, PanResponder } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import Moment from 'moment';
@@ -83,13 +83,36 @@ class Dishdetail extends Component {
     }
 }
 
+
 function RenderDish(props) {
 
     const dish = props.dish;
+    const viewRef = useRef(null);
+
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: (e, gestureState) => true,
+        onPanResponderGrant: (e, gestureState) => {
+            viewRef.current.rubberBand(1000);
+        },
+        onPanResponderEnd: (e, gestureState) => {
+            if (gestureState.dx < -100) {
+                Alert.alert(
+                    'Add Favorite?',
+                    'Are you sure you wish to add ' + dish.name + ' to favorites?',
+                    [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'OK', onPress: () => props.favorite ? null : props.onPress() }
+                    ],
+                    { cancelable: false }
+                )
+            }
+        }
+    })
 
     if (dish != null) {
         return (
-            <Animatable.View animation="fadeInDown" duration={1000}>
+            <Animatable.View animation="fadeInDown" duration={1000}
+                ref={viewRef} {...panResponder.panHandlers}>
                 <Card featuredTitle={dish.name} image={{ uri: baseUrl + dish.image }}>
                     <Text style={{ margin: 10 }}>{dish.description}</Text>
                     <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
@@ -114,6 +137,7 @@ function RenderDish(props) {
         return (<View></View>);
     }
 }
+
 
 function RenderComments(props) {
 
@@ -146,6 +170,7 @@ function RenderComments(props) {
         </Animatable.View>
     );
 }
+
 
 function CommentForm(props) {
     return (
