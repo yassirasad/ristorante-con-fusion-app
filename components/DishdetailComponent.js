@@ -47,16 +47,16 @@ class Dishdetail extends Component {
         this.props.postFavorite(dishId);
     }
 
+    toggleModal() {
+        this.setState({ showModal: !this.state.showModal });
+    }
+
     handleComment(dishId) {
         if (this.state.rating && this.state.author && this.state.comment) {
             this.props.postComment(dishId, this.state.rating, this.state.author, this.state.comment)
             this.resetForm();
         }
         console.log(this.state);
-    }
-
-    toggleModal() {
-        this.setState({ showModal: !this.state.showModal });
     }
 
     render() {
@@ -95,6 +95,7 @@ function RenderDish(props) {
             viewRef.current.rubberBand(1000);
         },
         onPanResponderEnd: (e, gestureState) => {
+            // right to left swap
             if (gestureState.dx < -100) {
                 Alert.alert(
                     'Add Favorite?',
@@ -105,6 +106,10 @@ function RenderDish(props) {
                     ],
                     { cancelable: false }
                 )
+            }
+            // left to right swap
+            else if (gestureState.dx > 100) {
+                props.toggleModal();
             }
         }
     })
@@ -181,7 +186,7 @@ function CommentForm(props) {
             <View style={{ justifyContent: 'center', margin: 20 }}>
                 <Rating style={{ marginBottom: 30 }}
                     minValue={1} startingValue={3} showRating
-                    onFinishRating={(r) => props.setRating(r)}
+                    onFinishRating={r => props.setRating(r)}
                 />
                 <Input
                     leftIcon={<Icon type='font-awesome' name='user-o' size={24} color='#512DA8' />}
