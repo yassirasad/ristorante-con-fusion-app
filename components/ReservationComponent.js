@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 // import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
-
 import {
   Text,
   View,
@@ -85,10 +84,7 @@ class Reservation extends Component {
 
     // When app is in foreground
     Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true
-      })
+      handleNotification: async () => ({ shouldShowAlert: true, shouldPlaySound: true })
     });
 
     Notifications.scheduleNotificationAsync({
