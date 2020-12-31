@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
-import { Input, CheckBox } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
+import { Input, CheckBox, Button, Icon } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 
 class Login extends Component {
@@ -10,7 +10,7 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      remember: false,
+      remember: false
     };
   }
 
@@ -32,7 +32,7 @@ class Login extends Component {
         'userinfo',
         JSON.stringify({
           username: this.state.username,
-          password: this.state.password,
+          password: this.state.password
         })
       ).catch((error) => console.log('Could not save user info', error));
     else
@@ -67,9 +67,17 @@ class Login extends Component {
         />
         <View style={styles.formButton}>
           <Button
+            title="  Login"
+            icon={<Icon name="sign-in" type="font-awesome" size={24} color="white" />}
+            buttonStyle={{ backgroundColor: '#512DA8' }}
             onPress={() => this.handleLogin()}
-            title="Login"
-            color="#512DA8"
+          />
+        </View>
+        <View style={styles.formButton}>
+          <Button
+            title="  Register"
+            icon={<Icon name="user-plus" type="font-awesome" size={24} color="white" />}
+            onPress={() => this.props.navigation.navigate('Register')}
           />
         </View>
       </View>
@@ -81,18 +89,11 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     margin: 10,
+    marginTop: 40
   },
-  formInput: {
-    margin: 10,
-  },
-  formCheckbox: {
-    backgroundColor: null,
-    margin: 0,
-  },
-  formButton: {
-    marginHorizontal: 20,
-    marginVertical: 40,
-  },
+  formInput: { marginHorizontal: 10 },
+  formCheckbox: { backgroundColor: null, margin: 0 },
+  formButton: { marginHorizontal: 20, marginVertical: 30 }
 });
 
 export default Login;

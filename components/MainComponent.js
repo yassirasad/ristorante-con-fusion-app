@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Platform,
-  SafeAreaView,
-} from 'react-native';
+import { View, Text, Image, StyleSheet, Platform, SafeAreaView } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   createDrawerNavigator,
   DrawerItemList,
-  DrawerContentScrollView,
+  DrawerContentScrollView
 } from '@react-navigation/drawer';
 import { connect } from 'react-redux';
 
@@ -25,19 +19,15 @@ import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Reservation from './ReservationComponent';
 import Login from './LoginComponent';
-import {
-  fetchDishes,
-  fetchComments,
-  fetchPromos,
-  fetchLeaders,
-} from '../redux/ActionCreators';
+import Register from './RegisterComponent';
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 
 const mapStateToProps = (state) => {
   return {
     dishes: state.dishes,
     comments: state.comments,
     promotions: state.promotions,
-    leaders: state.leaders,
+    leaders: state.leaders
   };
 };
 
@@ -45,18 +35,18 @@ const mapDispatchToProps = (dispatch) => ({
   fetchDishes: () => dispatch(fetchDishes()),
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),
-  fetchLeaders: () => dispatch(fetchLeaders()),
+  fetchLeaders: () => dispatch(fetchLeaders())
 });
 
 const HeaderOptions = {
   headerStyle: {
-    backgroundColor: '#512DA8',
+    backgroundColor: '#512DA8'
   },
   headerTintColor: '#fff',
   headerTitleStyle: {
     color: '#fff',
-    textAlign: 'center',
-  },
+    textAlign: 'center'
+  }
 };
 
 const MenuIcon = ({ navigation }) => (
@@ -78,10 +68,61 @@ function LoginNavigatorScreen() {
         name="Login"
         component={Login}
         options={({ navigation, route }) => ({
-          headerLeft: () => <MenuIcon navigation={navigation} />,
+          headerLeft: () => <MenuIcon navigation={navigation} />
         })}
       />
     </LoginNavigator.Navigator>
+  );
+}
+
+const RegisterNavigator = createStackNavigator();
+
+function RegisterNavigatorScreen() {
+  return (
+    <RegisterNavigator.Navigator screenOptions={HeaderOptions}>
+      <RegisterNavigator.Screen
+        name="Register"
+        component={Register}
+        options={({ navigation, route }) => ({
+          headerLeft: () => <MenuIcon navigation={navigation} />
+        })}
+      />
+    </RegisterNavigator.Navigator>
+  );
+}
+
+const TabNavigator = createBottomTabNavigator();
+
+function TabNavigatorScreen() {
+  return (
+    <TabNavigator.Navigator
+      tabBarOptions={{
+        activeTintColor: '#ffffff',
+        inactiveTintColor: '#888888',
+        activeBackgroundColor: '#9575CD',
+        inactiveBackgroundColor: '#D1C4E9',
+        tabStyle: { paddingVertical: 4 }
+      }}
+    >
+      <TabNavigator.Screen
+        name="Login"
+        component={LoginNavigatorScreen}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <Icon name="sign-in" type="font-awesome" size={size} color={color} />
+          )
+        }}
+      />
+      <TabNavigator.Screen
+        name="Register"
+        component={RegisterNavigatorScreen}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <Icon name="user-plus" type="font-awesome" size={size} color={color} />
+          )
+        }}
+      />
+    </TabNavigator.Navigator>
   );
 }
 
@@ -94,7 +135,7 @@ function HomeNavigatorScreen() {
         name="Home"
         component={Home}
         options={({ navigation, route }) => ({
-          headerLeft: () => <MenuIcon navigation={navigation} />,
+          headerLeft: () => <MenuIcon navigation={navigation} />
         })}
       />
     </HomeNavigator.Navigator>
@@ -110,7 +151,7 @@ function AboutNavigatorScreen() {
         name="About Us"
         component={About}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon navigation={navigation} />,
+          headerLeft: () => <MenuIcon navigation={navigation} />
         })}
       />
     </AboutNavigator.Navigator>
@@ -121,15 +162,12 @@ const MenuNavigator = createStackNavigator();
 
 function MenuNavigatorScreen() {
   return (
-    <MenuNavigator.Navigator
-      initialRouteName="Menu"
-      screenOptions={HeaderOptions}
-    >
+    <MenuNavigator.Navigator initialRouteName="Menu" screenOptions={HeaderOptions}>
       <MenuNavigator.Screen
         name="Menu"
         component={Menu}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon navigation={navigation} />,
+          headerLeft: () => <MenuIcon navigation={navigation} />
         })}
       />
       <MenuNavigator.Screen
@@ -150,7 +188,7 @@ function FavoritesNavigatorScreen() {
         name="Favorites"
         component={Favorites}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon navigation={navigation} />,
+          headerLeft: () => <MenuIcon navigation={navigation} />
         })}
       />
     </FavoritesNavigator.Navigator>
@@ -166,7 +204,7 @@ function ReservationNavigatorScreen() {
         name="Reservation"
         component={Reservation}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon navigation={navigation} />,
+          headerLeft: () => <MenuIcon navigation={navigation} />
         })}
       />
     </ReservationNavigator.Navigator>
@@ -182,7 +220,7 @@ function ContactNavigatorScreen() {
         name="Contact Us"
         component={Contact}
         options={({ navigation }) => ({
-          headerLeft: () => <MenuIcon navigation={navigation} />,
+          headerLeft: () => <MenuIcon navigation={navigation} />
         })}
       />
     </ContactNavigator.Navigator>
@@ -196,17 +234,17 @@ function MainNavigatorDrawer() {
     <MainNavigator.Navigator
       initialRouteName="Home"
       drawerStyle={{
-        backgroundColor: '#D1C4E9',
+        backgroundColor: '#D1C4E9'
       }}
       drawerContent={(props) => <CustomDrawerContentComponent {...props} />}
     >
       <MainNavigator.Screen
         name="Login"
-        component={LoginNavigatorScreen}
+        component={TabNavigatorScreen}
         options={{
           drawerIcon: ({ focused, color, size }) => (
             <Icon name="sign-in" type="font-awesome" size={24} color={color} />
-          ),
+          )
         }}
       />
       <MainNavigator.Screen
@@ -215,7 +253,7 @@ function MainNavigatorDrawer() {
         options={{
           drawerIcon: ({ focused, color, size }) => (
             <Icon name="home" type="font-awesome" size={24} color={color} />
-          ),
+          )
         }}
       />
       <MainNavigator.Screen
@@ -223,13 +261,8 @@ function MainNavigatorDrawer() {
         component={AboutNavigatorScreen}
         options={{
           drawerIcon: ({ focused, color, size }) => (
-            <Icon
-              name="info-circle"
-              type="font-awesome"
-              size={24}
-              color={color}
-            />
-          ),
+            <Icon name="info-circle" type="font-awesome" size={24} color={color} />
+          )
         }}
       />
       <MainNavigator.Screen
@@ -238,7 +271,7 @@ function MainNavigatorDrawer() {
         options={{
           drawerIcon: ({ focused, color, size }) => (
             <Icon name="list" type="font-awesome" size={24} color={color} />
-          ),
+          )
         }}
       />
       <MainNavigator.Screen
@@ -248,7 +281,7 @@ function MainNavigatorDrawer() {
           drawerLabel: 'My Favorites',
           drawerIcon: ({ focused, color, size }) => (
             <Icon name="heart" type="font-awesome" size={24} color={color} />
-          ),
+          )
         }}
       />
       <MainNavigator.Screen
@@ -258,7 +291,7 @@ function MainNavigatorDrawer() {
           drawerIcon: ({ focused, color, size }) => (
             <Icon name="cutlery" type="font-awesome" size={24} color={color} />
           ),
-          title: 'Reserve Table',
+          title: 'Reserve Table'
         }}
       />
       <MainNavigator.Screen
@@ -266,13 +299,8 @@ function MainNavigatorDrawer() {
         component={ContactNavigatorScreen}
         options={{
           drawerIcon: ({ focused, color, size }) => (
-            <Icon
-              name="address-card"
-              type="font-awesome"
-              size={24}
-              color={color}
-            />
-          ),
+            <Icon name="address-card" type="font-awesome" size={24} color={color} />
+          )
         }}
       />
     </MainNavigator.Navigator>
@@ -281,16 +309,10 @@ function MainNavigatorDrawer() {
 
 const CustomDrawerContentComponent = (props) => (
   <DrawerContentScrollView>
-    <SafeAreaView
-      style={styles.container}
-      forceInset={{ top: 'always', horizontal: 'never' }}
-    >
+    <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
       <View style={styles.drawerHeader}>
         <View style={{ flex: 1 }}>
-          <Image
-            source={require('./images/logo.png')}
-            style={styles.drawerImage}
-          />
+          <Image source={require('./images/logo.png')} style={styles.drawerImage} />
         </View>
         <View style={{ flex: 2 }}>
           <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
@@ -314,8 +336,7 @@ class Main extends Component {
       <NavigationContainer>
         <View
           style={{
-            paddingTop:
-              Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight,
+            paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
           }}
         ></View>
         <MainNavigatorDrawer />
@@ -326,7 +347,7 @@ class Main extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   drawerHeader: {
     backgroundColor: '#512DA8',
@@ -334,18 +355,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   drawerHeaderText: {
     color: 'white',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   drawerImage: {
     margin: 10,
     width: 80,
-    height: 60,
-  },
+    height: 60
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
