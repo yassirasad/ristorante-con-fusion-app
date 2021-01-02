@@ -38,13 +38,27 @@ class Register extends Component {
     }
   };
 
+  getImageFromGallery = async () => {
+    const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (cameraRollPermission.granted) {
+      let pickedImage = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3]
+      });
+      if (!pickedImage.cancelled) {
+        console.log('PICKED IMAGE: ', pickedImage);
+        this.processImage(pickedImage.uri);
+      }
+    }
+  };
+
   processImage = async (imageUri) => {
     let processedImage = await ImageManipulator.manipulateAsync(
       imageUri,
       [{ resize: { width: 400 } }],
       { format: ImageManipulator.SaveFormat.PNG }
     );
-    console.log('PROCESSED IMAGE', processedImage);
+    console.log('PROCESSED IMAGE: ', processedImage);
     this.setState({ imageUrl: processedImage.uri });
   };
 
@@ -68,6 +82,7 @@ class Register extends Component {
               style={styles.image}
             />
             <Button title="Camera" onPress={this.getImageFromCamera} />
+            <Button title="Gallery" onPress={this.getImageFromGallery} />
           </View>
           <Input
             placeholder="Username"
@@ -133,11 +148,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     margin: 20
   },
-  image: { margin: 10, width: 100, height: 75 },
+  image: { width: 100, height: 75 },
   formInput: { marginHorizontal: 10 },
   formCheckbox: { backgroundColor: null, margin: 0 },
   formButton: { marginHorizontal: 20, marginVertical: 30 }
