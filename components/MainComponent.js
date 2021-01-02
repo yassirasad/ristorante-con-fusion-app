@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, Platform, SafeAreaView } from 'react-native';
+import { View, Text, Image, StyleSheet, Platform, SafeAreaView, ToastAndroid } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,6 +10,7 @@ import {
   DrawerContentScrollView
 } from '@react-navigation/drawer';
 import { connect } from 'react-redux';
+import NetInfo from '@react-native-community/netinfo';
 
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
@@ -324,11 +325,9 @@ const CustomDrawerContentComponent = (props) => (
 );
 
 class Main extends Component {
-  componentDidMount() {
-    this.props.fetchDishes();
-    this.props.fetchComments();
-    this.props.fetchPromos();
-    this.props.fetchLeaders();
+  constructor(props) {
+    super(props);
+    this.unsubscribe;
   }
 
   render() {
@@ -342,6 +341,41 @@ class Main extends Component {
         <MainNavigatorDrawer />
       </NavigationContainer>
     );
+  }
+
+  componentDidMount() {
+    this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
+    this.props.fetchLeaders();
+
+    // Subscribe to Network Listener
+    this.unsubscribe = this.subscribeToNetworkState();
+  }
+
+  componentWillUnmount() {
+    // Unsubscribe from Network Listener
+    this.unsubscribe && this.unsubscribe();
+  }
+
+  subscribeToNetworkState() {
+    // Get the network state once
+    NetInfo.fetch().then((netState) => {
+      ToastAndroid.show('Initial Network Connectivity Type: ' + netState.type, ToastAndroid.LONG);
+    });
+
+    //Subscribe to network state updates
+    return NetInfo.addEventListener((netState) => {
+      ToastAndroid.show(
+        'Connection: ' +
+          netState.isConnected +
+          '  Type: ' +
+          netState.type +
+          '  Internet: ' +
+          netState.isInternetReachable,
+        ToastAndroid.LONG
+      );
+    });
   }
 }
 
