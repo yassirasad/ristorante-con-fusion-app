@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
+import * as Calendar from 'expo-calendar';
 import {
   Text,
   View,
@@ -11,7 +12,9 @@ import {
   Picker,
   Switch,
   TouchableOpacity,
-  Alert
+  Alert,
+  Platform,
+  ToastAndroid
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -29,11 +32,8 @@ class Reservation extends Component {
       showDTPicker: false,
       mode: 'date'
     };
+    this.handleReservation = this.handleReservation.bind(this);
   }
-
-  static navigationOptions = {
-    title: 'Reserve Table'
-  };
 
   resetForm() {
     this.setState({
@@ -45,7 +45,7 @@ class Reservation extends Component {
     });
   }
 
-  showAlert() {
+  handleReservation() {
     Alert.alert(
       'Your Reservation OK?',
       'Number of Guests: ' +
@@ -59,13 +59,45 @@ class Reservation extends Component {
         {
           text: 'OK',
           onPress: () => {
-            this.resetForm();
+            this.addReservationToCalendar(this.state.date);
             this.presentLocalNotification(this.state.date);
+            this.resetForm();
           }
         }
       ],
       { cancelable: false }
     );
+  }
+
+  async addReservationToCalendar(date) {
+    if (await this.obtainCalendarPermission()) {
+      const calendars = await Calendar.getCalendarsAsync();
+
+      const defaultCalendar =
+        Platform.OS === 'ios'
+          ? await Calendar.getDefaultCalendarAsync()
+          : calendars.filter((cal) => cal.allowsModifications)[0];
+
+      if (defaultCalendar) {
+        Calendar.createEventAsync(defaultCalendar.id, {
+          title: 'Con Fusion Table Reservation',
+          startDate: date,
+          endDate: new Date(date.valueOf() + 2 * 60 * 60 * 1000),
+          timeZone: 'Asia/Hong_Kong',
+          location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+        })
+          .then((res) => ToastAndroid.show(`Event created in Calendar ${res}`, ToastAndroid.LONG))
+          .catch((err) =>
+            ToastAndroid.show(`Couldn't create event in Calendar: ${err}`, ToastAndroid.LONG)
+          );
+      }
+    }
+  }
+
+  async obtainCalendarPermission() {
+    const permission = await Calendar.requestCalendarPermissionsAsync();
+    if (!permission.granted) Alert.alert('Calender permission not granted to create Event');
+    return permission.granted;
   }
 
   async obtainNotificationPermission() {
@@ -184,7 +216,7 @@ class Reservation extends Component {
           </View>
           <View style={styles.formRow}>
             <Button
-              onPress={() => this.showAlert()}
+              onPress={this.handleReservation}
               title="Reserve"
               color="#512DA8"
               accessibilityLabel="Learn more about this purple button"
